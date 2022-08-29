@@ -11,7 +11,7 @@ omega_0 = ~10 * 2pi #explorar rango de omega0
 Ver el efecto de la varianza del omega0
 Además de agregar ruido después
 
-[ ] Conectividad de tipo lattice 1D redondo simétrico (netwokrx cycle), o de grado 2-3 (conectadas con los vecinos, +g en subdiagonales)
+[x] Conectividad de tipo lattice 1D redondo simétrico (netwokrx cycle), o de grado 2-3 (conectadas con los vecinos, +g en subdiagonales)
 
 
 
@@ -31,7 +31,7 @@ Además de agregar ruido después
 [ ] Crearfuncion para carga si existe
 [ ] Explorar distintos números de nodos
 [ ] Usar/Crear perfilador
-[ ] Definir modelo POO
+[x] Definir modelo POO
 
 ## Siguientes
 - Post esto WiCo
