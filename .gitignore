@@ -1,3 +1,4 @@
 *.npy
 *.png
 *.out
+tmp/*

@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from anarpy.utils.FCDutil.fcd import phaseFC
 import networkx as nx
+from numba.experimental import jitclass
 from sys import argv
+
 
 
 def get_taskId():
@@ -16,11 +19,11 @@ class Kuramoto():
         self.omega0 = omega0
         self.cm = cm
         self.N = cm.shape[0]
-        self.D = 0.01#np.random.uniform(0.5,1.5,size=N)  #Variance, not SD
+        self.D = 0.00#np.random.uniform(0.5,1.5,size=N)  #Variance, not SD
         self.sqDt=np.sqrt(2*D/dt)
         
     def iter(self,x,t):
-        return self.omega0 + np.sum(self.cm*np.sin(x - x[:,None]),axis=-1) + self.sqDt*np.random.normal(0,1,self.N)
+        return self.omega0 + np.sum(self.cm*np.sin(x - x[:,None]),axis=-1)# + self.sqDt*np.random.normal(0,1,self.N)
 
 class Simulator():
     def __init__(self,model,N,dt,t_stop,t_equil):
@@ -38,6 +41,7 @@ class Simulator():
         for i in range(self.t0):
             self.x += self.dt*self.model.iter(self.x,0)
     
+    #@njit()
     def simulate(self):
         for i,t in enumerate(range(self.time)):
             self.x_t[i]=self.x
@@ -53,6 +57,9 @@ class Simulator():
     
     def get_cmat(self):
         return np.mean(np.abs((np.exp(1j*self.phase[:,None,:])+np.exp(1j*self.phase[:,:,None]))/2),0)
+    
+    def get_cmat2(self):
+        return phaseFC(self.phase)
 
 
 def lattice1d(N,g=1,n=0):
@@ -70,21 +77,21 @@ if __name__== "__main__":
     taskId = get_taskId()
     N = 40
     T = 50
-    mu = 0.5
-    std = 1.5
+    mu = 0
+    std = 0.1
     dt = 0.01
-    g = np.round(0.05*taskId,3)
-    CM = lattice1d(N,g)
-
+    g = np.round(0.01*taskId,3)
+    CM = lattice1d(N,g,3)
     Omega0 = np.random.lognormal(mu,std,N)*2*np.pi
     kura = Kuramoto(CM,Omega0,dt)
     sim= Simulator(kura,N,dt,20,T)
 
     sim.equil()
     xt,phase = sim.simulate()
-    cmat = sim.get_cmat()
+    #cmat = sim.get_cmat()
     _,r,meta = sim.get_metrics()
     print(g,r,meta)
+
     if 0:
         #PLOTS
         plt.figure(1)
@@ -112,3 +119,4 @@ if __name__== "__main__":
         plt.savefig(f"plots/fig2_{taskId}.png")
     
     np.save(f"data/x_{g}",xt)
+    np.save(f"tmp/grmeta_{g}",[g,r,meta])

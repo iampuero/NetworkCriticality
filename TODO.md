@@ -8,23 +8,28 @@ dt = 0.01
 omega_0 = ~10 * 2pi #explorar rango de omega0 
 ```
 
+
 Ver el efecto de la varianza del omega0
 Además de agregar ruido después
 
 [x] Conectividad de tipo lattice 1D redondo simétrico (netwokrx cycle), o de grado 2-3 (conectadas con los vecinos, +g en subdiagonales)
 
+[] Fijar Seed
+[] Encontrar punto de inflexión de R y meta
+[] Probar con nodos 100,500,1000
+
 
 
 ## Plot
-[ ] Sincronia de fase v/s G (sea g el valor de conexion de los nodos)
+[?] Sincronia de fase v/s G (sea g el valor de conexion de los nodos)
 - Se espera una curva sigmoidal
 
 [x] realizar wrapping de fase
 
-[ ] Correlaciones entre nodos vecinos espaciotemporal en el punto critico
+[?] Correlaciones entre nodos vecinos espaciotemporal en el punto critico
 - Sincronía de a pares v/s distancia?
 -
-[ ] Graficar metaestaibilidad v/s g
+[x] Graficar metaestaibilidad v/s g
 
 ## Extras
 [ ] Tratar como interactivo y guardar resultados previos en base a nombreconvencion
