@@ -75,9 +75,9 @@ def plotter():
  
 if __name__== "__main__":
     taskId = get_taskId()
-    N = 40
-    T = 50
-    mu = 0
+    N = 800
+    T = 30
+    mu = 0.01
     std = 0.1
     dt = 0.01
     g = np.round(0.01*taskId,3)
@@ -119,4 +119,4 @@ if __name__== "__main__":
         plt.savefig(f"plots/fig2_{taskId}.png")
     
     np.save(f"data/x_{g}",xt)
-    np.save(f"tmp/grmeta_{g}",[g,r,meta])
+    np.save(f"tmp/grmeta_{N}_{g}",[g,r,meta])
