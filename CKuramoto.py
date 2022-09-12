@@ -4,6 +4,7 @@ from anarpy.utils.FCDutil.fcd import phaseFC
 import networkx as nx
 from numba.experimental import jitclass
 from sys import argv
+from os import listdir
 
 
 
@@ -13,6 +14,20 @@ def get_taskId():
     except:
         taskId = 0
     return taskId
+
+def get_N():
+    try:
+        nodeNumber = int(argv[2])
+    except:
+        nodeNumber = 10
+    return nodeNumber
+
+def get_label():
+    try:
+        label = str(argv[3])
+    except:
+        label = "Kuramoto"
+    return label
 
 class Kuramoto():
     def __init__(self,cm,omega0,dt,D=0.01):
@@ -41,7 +56,7 @@ class Simulator():
         for i in range(self.t0):
             self.x += self.dt*self.model.iter(self.x,0)
     
-    #@njit()
+
     def simulate(self):
         for i,t in enumerate(range(self.time)):
             self.x_t[i]=self.x
@@ -70,18 +85,34 @@ def lattice1d(N,g=1,n=0):
     cm = cm*g
     return cm
 
+def randomCM(N,p=0.3,g=0,cmin=-0.5,cmax=0.5):
+    #Random*mask; trilow+trilow.T
+    if not g:
+        cm=np.random.uniform(cmin,cmax,size=(N,N))
+    else:
+        cm=np.ones((N,N))*g
+    cm = cm*np.random.binomial(1,p,size=(N,N))
+    return np.tril(cm,-1)+np.tril(cm,-1).T
+
+
 def plotter():
     pass
  
 if __name__== "__main__":
     taskId = get_taskId()
-    N = 800
+    label = get_label()
+    np.random.seed(111)
+    N = get_N()
     T = 30
-    mu = 0.01
-    std = 0.1
+    mu = 0.00
+    std = 0.05
     dt = 0.01
-    g = np.round(0.01*taskId,3)
-    CM = lattice1d(N,g,3)
+    g = np.round(0.001*taskId,3)
+
+    if f"grmeta_{label}_{N}_{g}.npy" in listdir("tmp"):
+        exit()
+    CM = lattice1d(N,g,7)
+    #CM = randomCM(N,0.08,g)
     Omega0 = np.random.lognormal(mu,std,N)*2*np.pi
     kura = Kuramoto(CM,Omega0,dt)
     sim= Simulator(kura,N,dt,20,T)
@@ -90,7 +121,6 @@ if __name__== "__main__":
     xt,phase = sim.simulate()
     #cmat = sim.get_cmat()
     _,r,meta = sim.get_metrics()
-    print(g,r,meta)
 
     if 0:
         #PLOTS
@@ -118,5 +148,5 @@ if __name__== "__main__":
 
         plt.savefig(f"plots/fig2_{taskId}.png")
     
-    np.save(f"data/x_{g}",xt)
-    np.save(f"tmp/grmeta_{N}_{g}",[g,r,meta])
+    #np.save(f"data/x_{label}_{N}_{g}",xt)
+    np.save(f"tmp/grmeta_{label}_{N}_{g}",[g,r,meta])

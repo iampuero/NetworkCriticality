@@ -13,30 +13,32 @@ Ver el efecto de la varianza del omega0
 Además de agregar ruido después
 
 [x] Conectividad de tipo lattice 1D redondo simétrico (netwokrx cycle), o de grado 2-3 (conectadas con los vecinos, +g en subdiagonales)
+[x] Fijar Seed
+[x] Encontrar punto de inflexión de R y meta
+[x] Probar con nodos 100,500,1000
 
-[] Fijar Seed
-[] Encontrar punto de inflexión de R y meta
-[] Probar con nodos 100,500,1000
+### Observaciones
+* Linear no muestra una curva facilmente
+* Random genera punto de inflexión
+* Rango de G depende mucho de N y std de $\omega0$
+* Valores muy pequeños de G para, alto N de lattice1d y probabilidad de conexión en random
 
 
 
 ## Plot
-[?] Sincronia de fase v/s G (sea g el valor de conexion de los nodos)
-- Se espera una curva sigmoidal
+- [x] Sincronia de fase v/s G (sea g el valor de conexion de los nodos)
+    - Se espera una curva sigmoidal
 
-[x] realizar wrapping de fase
-
-[?] Correlaciones entre nodos vecinos espaciotemporal en el punto critico
-- Sincronía de a pares v/s distancia?
--
-[x] Graficar metaestaibilidad v/s g
+- [?] Correlaciones entre nodos vecinos espaciotemporal en el punto critico
+    - Sincronía de a pares v/s distancia?
+- [x] Graficar metaestabilidad v/s g
 
 ## Extras
-[ ] Tratar como interactivo y guardar resultados previos en base a nombreconvencion
-[ ] Crearfuncion para carga si existe
-[ ] Explorar distintos números de nodos
-[ ] Usar/Crear perfilador
-[x] Definir modelo POO
+- [x] Tratar como interactivo y guardar resultados previos en base a nombreconvencion
+- [x] Crearfuncion para carga si existe
+- [x] Explorar distintos números de nodos 
+- [x] Usar/Crear perfilador -- _Tiempos por mientras_
+- [x] Definir modelo POO
 
 ## Siguientes
 - Post esto WiCo
