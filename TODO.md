@@ -28,17 +28,24 @@ Además de agregar ruido después
 ## Plot
 - [x] Sincronia de fase v/s G (sea g el valor de conexion de los nodos)
     - Se espera una curva sigmoidal
-
+- [x] Graficar metaestabilidad v/s g
 - [?] Correlaciones entre nodos vecinos espaciotemporal en el punto critico
     - Sincronía de a pares v/s distancia?
-- [x] Graficar metaestabilidad v/s g
 
 ## Extras
-- [x] Tratar como interactivo y guardar resultados previos en base a nombreconvencion
-- [x] Crearfuncion para carga si existe
-- [x] Explorar distintos números de nodos 
-- [x] Usar/Crear perfilador -- _Tiempos por mientras_
-- [x] Definir modelo POO
+- [x] Guardar resultado en base a nombre/convencion
+    - asdasd
+- [x] Crearfuncion para carga si existe 
+- [x] Perfilador -> Sacct para sobre 30 segundos
+- [x] Modelo POO
+    - Class Kuramoto
+    - Class Simulator
+
+
+Densidad: subir un poco la densidad?? Explorar
+Definiciones de distancia entre nodos
+Utilizar logspace con $G ~100 10^-1
+Prune N500 para arriba
 
 ## Siguientes
 - Post esto WiCo

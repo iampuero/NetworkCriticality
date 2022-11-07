@@ -2,29 +2,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from anarpy.utils.FCDutil.fcd import phaseFC
 import networkx as nx
-from numba.experimental import jitclass
 from sys import argv
 from os import listdir
+from utils import getJobId,getTaskId
 
-
-
-def get_taskId():
-    try:
-        taskId = int(argv[1])
-    except:
-        taskId = 0
-    return taskId
 
 def get_N():
     try:
-        nodeNumber = int(argv[2])
+        nodeNumber = int(argv[1])
     except:
         nodeNumber = 10
     return nodeNumber
 
 def get_label():
     try:
-        label = str(argv[3])
+        label = str(argv[2])
     except:
         label = "Kuramoto"
     return label
@@ -34,7 +26,7 @@ class Kuramoto():
         self.omega0 = omega0
         self.cm = cm
         self.N = cm.shape[0]
-        self.D = 0.00#np.random.uniform(0.5,1.5,size=N)  #Variance, not SD
+        self.D = 0.00 #np.random.uniform(0.5,1.5,size=N)  #Variance, not SD
         self.sqDt=np.sqrt(2*D/dt)
         
     def iter(self,x,t):
@@ -56,7 +48,6 @@ class Simulator():
         for i in range(self.t0):
             self.x += self.dt*self.model.iter(self.x,0)
     
-
     def simulate(self):
         for i,t in enumerate(range(self.time)):
             self.x_t[i]=self.x
@@ -75,6 +66,12 @@ class Simulator():
     
     def get_cmat2(self):
         return phaseFC(self.phase)
+    
+    def get_params(self):
+        return {"dt":self.dt,
+                "t_equil":self.t_equil, "t_stop":self.t_stop,
+                "t0":self.t0, "time":self.time,
+                "model_params":self.model.getParams()}
 
 
 def lattice1d(N,g=1,n=0):
@@ -99,7 +96,10 @@ def plotter():
     pass
  
 if __name__== "__main__":
-    taskId = get_taskId()
+    #exec example
+    #sbatch Ckuramoto -> python3 N label 
+    taskId = getTaskId()
+    jobId = getJobId()-taskId
     label = get_label()
     np.random.seed(111)
     N = get_N()
@@ -107,16 +107,19 @@ if __name__== "__main__":
     mu = 0.00
     std = 0.05
     dt = 0.01
-    g = np.round(0.001*taskId,3)
+    prob = 0.08 #CM connect probability
+    g = np.logspace(-5,np.log10(0.03),128)[taskId-1]#np.round(0.000025*taskId,8)
 
     if f"grmeta_{label}_{N}_{g}.npy" in listdir("tmp"):
         exit()
-    CM = lattice1d(N,g,7)
-    #CM = randomCM(N,0.08,g)
+        
+    if "latt" in label:
+        CM = lattice1d(N,g,int(prob/2*N))
+    elif "rand" in label:
+        CM = randomCM(N,prob,g)
     Omega0 = np.random.lognormal(mu,std,N)*2*np.pi
     kura = Kuramoto(CM,Omega0,dt)
     sim= Simulator(kura,N,dt,20,T)
-
     sim.equil()
     xt,phase = sim.simulate()
     #cmat = sim.get_cmat()
@@ -148,5 +151,6 @@ if __name__== "__main__":
 
         plt.savefig(f"plots/fig2_{taskId}.png")
     
-    #np.save(f"data/x_{label}_{N}_{g}",xt)
-    np.save(f"tmp/grmeta_{label}_{N}_{g}",[g,r,meta])
+    #np.save(f"tmp/grmeta_{label}_{N}_{g}",[g,r,meta])
+#    np.save(f"data/sim/x_{N}_{label}_{taskId}",xt)
+    np.save(f"tmp/grmeta_lsp_{N}_{label}_{taskId}",[g,r,meta])

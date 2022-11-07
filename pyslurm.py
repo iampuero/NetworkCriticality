@@ -6,12 +6,9 @@ def run(command):
     out = int(check_output(command,shell=True,text=True))
     return out
 
-
-
-
-dependency = "sbatch --dependency=afterok:{} {}".format
-
-#start =
-#end = 
+base = "sbatch --parsable"
+dependency = " --dependency=afterok:{jobid} "
+array=" --array={start}-{finish}%{maxjobs} "
+name = "-J {name}"
 
 
